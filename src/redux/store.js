@@ -10,6 +10,7 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import { dataContactReducer } from './dataContact/dataContact.reducer';
 
 const { configureStore } = require('@reduxjs/toolkit');
 
@@ -22,6 +23,7 @@ const contactsConfig = {
 export const store = configureStore({
   reducer: {
     contactsStore: persistReducer(contactsConfig, contactReducer),
+    dataContactStore: dataContactReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

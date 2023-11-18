@@ -1,7 +1,18 @@
 import React from 'react';
-import css from 'components/Filter/Filter.module.css';
+import { useDispatch, useSelector } from 'react-redux';
 
-export const Filter = ({ changeInput, filter }) => {
+import css from 'components/Filter/Filter.module.css';
+import { filterValue } from 'redux/contacts/contacts.reducer';
+
+export const Filter = () => {
+  const dispatch = useDispatch();
+  const filter = useSelector(state => state.contactsStore.filter);
+
+  const onChangeInput = e => {
+    const value = e.target.value;
+    dispatch(filterValue(value));
+  };
+
   return (
     <div className={css.container}>
       <label className={css.labelForm}>Find contact by name</label>
@@ -9,7 +20,7 @@ export const Filter = ({ changeInput, filter }) => {
         type="text"
         name="filter"
         className={css.inputForm}
-        onChange={changeInput}
+        onChange={onChangeInput}
         value={filter}
       />
     </div>
