@@ -1,32 +1,43 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { nanoid } from 'nanoid';
 import { ContactForm } from './ContactForm/ContactForm';
 import { ContactList } from 'components/ContactList/ContactList';
 import { Filter } from './Filter/Filter';
 import css from 'components/ContactForm/ContactForm.module.css';
+import {
+  addContact,
+  deleteContact,
+  filterValue,
+} from 'redux/contacts/contacts.reducer';
 
 export const App = () => {
-  const [contacts, setContacts] = useState(() => {
-    return (
-      JSON.parse(localStorage.getItem('contacts')) ?? [
-        { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-        { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-        { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-        { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-      ]
-    );
-  });
+  const dispatch = useDispatch();
 
-  const [filter, setFilter] = useState('');
+  const contacts = useSelector(state => state.contactsStore.contacts);
+  const filter = useSelector(state => state.contactsStore.filter);
 
-  useEffect(() => {
-    const stringJsonContacts = JSON.stringify(contacts);
-    localStorage.setItem('contacts', stringJsonContacts);
-  }, [contacts]);
+  // const [contacts, setContacts] = useState(() => {
+  //   return (
+  //     JSON.parse(localStorage.getItem('contacts')) ?? [
+  //       { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+  //       { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+  //       { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+  //       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+  //     ]
+  //   );
+  // });
+
+  // const [filter, setFilter] = useState('');
+
+  // useEffect(() => {
+  //   const stringJsonContacts = JSON.stringify(contacts);
+  //   localStorage.setItem('contacts', stringJsonContacts);
+  // }, [contacts]);
 
   const onChangeInput = e => {
     const value = e.target.value;
-    setFilter(value);
+    dispatch(filterValue(value));
   };
 
   const filterContacts = () => {
@@ -36,7 +47,7 @@ export const App = () => {
   };
 
   const onDeleteContact = id => {
-    setContacts(contacts.filter(item => item.id !== id));
+    dispatch(deleteContact(id));
   };
 
   const onAddContact = newUser => {
@@ -58,8 +69,7 @@ export const App = () => {
       ...newUser,
       id: nanoid(),
     };
-
-    setContacts(prevState => [...prevState, user]);
+    dispatch(addContact(user));
   };
 
   return (
