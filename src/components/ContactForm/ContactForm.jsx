@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { nanoid } from 'nanoid';
 
-import { setName, setNumber } from 'redux/dataContact/dataContact.reducer';
 import { addContact } from 'redux/contacts/contacts.reducer';
 
 import css from 'components/ContactForm/ContactForm.module.css';
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
-  const name = useSelector(state => state.dataContactStore.name);
-  const number = useSelector(state => state.dataContactStore.number);
+
   const contacts = useSelector(state => state.contactsStore.contacts);
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
 
   const onFormSubmit = e => {
     e.preventDefault();
@@ -37,8 +37,8 @@ export const ContactForm = () => {
     }
 
     dispatch(addContact(newUser));
-    dispatch(setName(''));
-    dispatch(setNumber(''));
+    setName('');
+    setNumber('');
   };
 
   const onChangeInput = e => {
@@ -47,11 +47,11 @@ export const ContactForm = () => {
 
     switch (nameInput) {
       case 'name':
-        dispatch(setName(value));
+        setName(value);
         return;
 
       case 'number':
-        dispatch(setNumber(value));
+        setNumber(value);
         return;
 
       default:
